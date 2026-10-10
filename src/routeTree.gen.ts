@@ -10,11 +10,26 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ComprasRouteImport } from './routes/compras'
+import { Route as ListaRouteImport } from './routes/lista'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as NovaRouteImport } from './routes/nova'
+import { Route as RequisicoesIndexRouteImport } from './routes/requisicoes.index'
+import { Route as RequisicoesIdRouteImport } from './routes/requisicoes.$id'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ComprasRoute = ComprasRouteImport.update({
+  id: '/compras',
+  path: '/compras',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ListaRoute = ListaRouteImport.update({
+  id: '/lista',
+  path: '/lista',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginRoute = LoginRouteImport.update({
@@ -22,31 +37,88 @@ const LoginRoute = LoginRouteImport.update({
   path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
+const NovaRoute = NovaRouteImport.update({
+  id: '/nova',
+  path: '/nova',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RequisicoesIndexRoute = RequisicoesIndexRouteImport.update({
+  id: '/requisicoes/',
+  path: '/requisicoes/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RequisicoesIdRoute = RequisicoesIdRouteImport.update({
+  id: '/requisicoes/$id',
+  path: '/requisicoes/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/compras': typeof ComprasRoute
+  '/lista': typeof ListaRoute
   '/login': typeof LoginRoute
+  '/nova': typeof NovaRoute
+  '/requisicoes/$id': typeof RequisicoesIdRoute
+  '/requisicoes/': typeof RequisicoesIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/compras': typeof ComprasRoute
+  '/lista': typeof ListaRoute
   '/login': typeof LoginRoute
+  '/nova': typeof NovaRoute
+  '/requisicoes/$id': typeof RequisicoesIdRoute
+  '/requisicoes': typeof RequisicoesIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/compras': typeof ComprasRoute
+  '/lista': typeof ListaRoute
   '/login': typeof LoginRoute
+  '/nova': typeof NovaRoute
+  '/requisicoes/$id': typeof RequisicoesIdRoute
+  '/requisicoes/': typeof RequisicoesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/login'
+  fullPaths:
+    | '/'
+    | '/compras'
+    | '/lista'
+    | '/login'
+    | '/nova'
+    | '/requisicoes/$id'
+    | '/requisicoes/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/login'
-  id: '__root__' | '/' | '/login'
+  to:
+    | '/'
+    | '/compras'
+    | '/lista'
+    | '/login'
+    | '/nova'
+    | '/requisicoes/$id'
+    | '/requisicoes'
+  id:
+    | '__root__'
+    | '/'
+    | '/compras'
+    | '/lista'
+    | '/login'
+    | '/nova'
+    | '/requisicoes/$id'
+    | '/requisicoes/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ComprasRoute: typeof ComprasRoute
+  ListaRoute: typeof ListaRoute
   LoginRoute: typeof LoginRoute
+  NovaRoute: typeof NovaRoute
+  RequisicoesIdRoute: typeof RequisicoesIdRoute
+  RequisicoesIndexRoute: typeof RequisicoesIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -58,6 +130,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/compras': {
+      id: '/compras'
+      path: '/compras'
+      fullPath: '/compras'
+      preLoaderRoute: typeof ComprasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/lista': {
+      id: '/lista'
+      path: '/lista'
+      fullPath: '/lista'
+      preLoaderRoute: typeof ListaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/login': {
       id: '/login'
       path: '/login'
@@ -65,12 +151,38 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/nova': {
+      id: '/nova'
+      path: '/nova'
+      fullPath: '/nova'
+      preLoaderRoute: typeof NovaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/requisicoes/': {
+      id: '/requisicoes/'
+      path: '/requisicoes'
+      fullPath: '/requisicoes/'
+      preLoaderRoute: typeof RequisicoesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/requisicoes/$id': {
+      id: '/requisicoes/$id'
+      path: '/requisicoes/$id'
+      fullPath: '/requisicoes/$id'
+      preLoaderRoute: typeof RequisicoesIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ComprasRoute: ComprasRoute,
+  ListaRoute: ListaRoute,
   LoginRoute: LoginRoute,
+  NovaRoute: NovaRoute,
+  RequisicoesIdRoute: RequisicoesIdRoute,
+  RequisicoesIndexRoute: RequisicoesIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
