@@ -60,8 +60,19 @@ function LoginPage() {
   };
 
   const google = async () => {
-    const r = await lovable.auth.signInWithOAuth("google", { redirect_uri: window.location.origin });
-    if (r.error) toast.error("Não foi possível entrar com Google.");
+    // O broker de OAuth do Lovable (/~oauth) só existe nos domínios do Lovable;
+    // fora deles (ex.: Netlify) usamos o OAuth do Supabase diretamente.
+    const onLovable = /(^|\.)lovable\.(app|dev)$/.test(window.location.hostname);
+    if (onLovable) {
+      const r = await lovable.auth.signInWithOAuth("google", { redirect_uri: window.location.origin });
+      if (r.error) toast.error("Não foi possível entrar com Google.");
+      return;
+    }
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: { redirectTo: window.location.origin },
+    });
+    if (error) toast.error("Não foi possível entrar com Google.");
   };
 
   return (
