@@ -76,7 +76,10 @@ function Detail() {
       observations: p.obs || null,
       purchased_by: session!.user.id,
     });
-    if (error) return toast.error("Erro ao registrar compra.");
+    if (error) {
+      toast.error("Erro ao registrar compra.");
+      return;
+    }
     const next: RequestStatus = qty >= Number(r.quantity_requested) ? "comprado" : "parcial";
     await changeStatus(next, `Comprado: ${qty} ${r.unit.toLowerCase()}`);
     setP({ qty: "", price: "", place: "", obs: "" });
