@@ -14,6 +14,48 @@ export type Database = {
   }
   public: {
     Tables: {
+      admin_actions: {
+        Row: {
+          action: string
+          actor_id: string | null
+          created_at: string
+          details: string | null
+          id: string
+        }
+        Insert: {
+          action: string
+          actor_id?: string | null
+          created_at?: string
+          details?: string | null
+          id?: string
+        }
+        Update: {
+          action?: string
+          actor_id?: string | null
+          created_at?: string
+          details?: string | null
+          id?: string
+        }
+        Relationships: []
+      }
+      app_settings: {
+        Row: {
+          key: string
+          updated_at: string
+          value: Json
+        }
+        Insert: {
+          key: string
+          updated_at?: string
+          value?: Json
+        }
+        Update: {
+          key?: string
+          updated_at?: string
+          value?: Json
+        }
+        Relationships: []
+      }
       categories: {
         Row: {
           active: boolean
@@ -40,18 +82,21 @@ export type Database = {
           created_at: string
           email: string | null
           id: string
+          is_demo: boolean
           name: string
         }
         Insert: {
           created_at?: string
           email?: string | null
           id: string
+          is_demo?: boolean
           name?: string
         }
         Update: {
           created_at?: string
           email?: string | null
           id?: string
+          is_demo?: boolean
           name?: string
         }
         Relationships: []
@@ -186,6 +231,7 @@ export type Database = {
           category_id: string | null
           created_at: string
           id: string
+          is_demo: boolean
           item_name: string
           observations: string | null
           priority: Database["public"]["Enums"]["request_priority"]
@@ -199,6 +245,7 @@ export type Database = {
           category_id?: string | null
           created_at?: string
           id?: string
+          is_demo?: boolean
           item_name: string
           observations?: string | null
           priority?: Database["public"]["Enums"]["request_priority"]
@@ -212,6 +259,7 @@ export type Database = {
           category_id?: string | null
           created_at?: string
           id?: string
+          is_demo?: boolean
           item_name?: string
           observations?: string | null
           priority?: Database["public"]["Enums"]["request_priority"]
