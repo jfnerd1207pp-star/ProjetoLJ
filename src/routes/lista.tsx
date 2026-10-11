@@ -35,7 +35,7 @@ const FILTERS: { label: string; match: (s: RequestStatus) => boolean }[] = [
 function Lista() {
   const { data, isLoading } = useQuery(requestsQuery("visible"));
   const [f, setF] = useState(0);
-  const list = (data ?? []).filter((r) => FILTERS[f].match(r.status));
+  const list = (data ?? []).filter((r) => FILTERS[f]?.match(r.status) ?? true);
   return (
     <div className="space-y-4">
       <div className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1">
