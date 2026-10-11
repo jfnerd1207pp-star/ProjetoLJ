@@ -126,11 +126,11 @@ function Users() {
     },
   });
   const toggle = async (uid: string, name: string, role: AppRole, has: boolean) => {
-    if (uid === session?.user.id && role === "admin" && has) return toast.error("Você não pode remover seu próprio acesso de admin.");
+    if (uid === session?.user.id && role === "admin" && has) { toast.error("Você não pode remover seu próprio acesso de admin."); return; }
     const { error } = has
       ? await supabase.from("user_roles").delete().eq("user_id", uid).eq("role", role)
       : await supabase.from("user_roles").insert({ user_id: uid, role });
-    if (error) return toast.error("Não foi possível alterar a função.");
+    if (error) { toast.error("Não foi possível alterar a função."); return; }
     await logAction(has ? "Função removida" : "Função concedida", `${name}: ${role}`);
     qc.invalidateQueries({ queryKey: ["admin"] });
   };
@@ -170,7 +170,7 @@ function Cats() {
   const add = async () => {
     if (name.trim().length < 2) return;
     const { error } = await supabase.from("categories").insert({ name: name.trim() });
-    if (error) return toast.error("Erro ao criar categoria.");
+    if (error) { toast.error("Erro ao criar categoria."); return; }
     await logAction("Categoria criada", name.trim());
     setName("");
     refresh();
@@ -208,7 +208,7 @@ function Reqs() {
     if (!confirm(`Excluir "${n}"?`)) return;
     await supabase.from("purchases").delete().eq("request_id", id);
     const { error } = await supabase.from("requests").delete().eq("id", id);
-    if (error) return toast.error("Não foi possível excluir (há histórico vinculado).");
+    if (error) { toast.error("Não foi possível excluir (há histórico vinculado)."); return; }
     await logAction("Requisição excluída", n);
     qc.invalidateQueries();
   };
@@ -240,7 +240,7 @@ function Config() {
   useEffect(() => { setEventName(data?.event_name ?? ""); setNotice(data?.notice ?? ""); }, [data]);
   const save = async () => {
     const { error } = await supabase.from("app_settings").upsert({ key: "general", value: { event_name: eventName, notice }, updated_at: new Date().toISOString() });
-    if (error) return toast.error("Erro ao salvar.");
+    if (error) { toast.error("Erro ao salvar."); return; }
     await logAction("Configurações atualizadas");
     toast.success("Configurações salvas.");
   };
