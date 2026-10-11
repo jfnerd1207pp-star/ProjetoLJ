@@ -2,6 +2,7 @@ import { createContext, useContext, useEffect, useState, type ReactNode } from "
 import type { Session } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
 import type { AppRole } from "@/lib/lj";
+import { claimAdmin } from "@/lib/admin.functions";
 
 type AuthState = {
   session: Session | null;
@@ -38,6 +39,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       return;
     }
     setTimeout(async () => {
+      try { await claimAdmin(); } catch { /* ignore */ }
       const [{ data: r }, { data: p }] = await Promise.all([
         supabase.from("user_roles").select("role").eq("user_id", uid),
         supabase.from("profiles").select("name").eq("id", uid).maybeSingle(),
