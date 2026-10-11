@@ -145,3 +145,7 @@
 @utility pb-safe {
   padding-bottom: calc(env(safe-area-inset-bottom) + 6rem);
 }
+
+#lovable-badge {
+display: none !important;
+}
