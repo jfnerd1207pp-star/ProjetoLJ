@@ -60,8 +60,15 @@ function LoginPage() {
   };
 
   const google = async () => {
-    const r = await lovable.auth.signInWithOAuth("google", { redirect_uri: window.location.origin });
-    if (r.error) toast.error("Não foi possível entrar com Google.");
+    // The Lovable OAuth broker (/~oauth) only exists on Lovable hosting; elsewhere (e.g. Netlify) use Supabase OAuth directly.
+    const host = window.location.hostname;
+    const onLovableHost = ["lovable.app", "lovableproject.com", "lovable.dev"].some(
+      (z) => host === z || host.endsWith("." + z),
+    );
+    const { error } = onLovableHost
+      ? await lovable.auth.signInWithOAuth("google", { redirect_uri: window.location.origin })
+      : await supabase.auth.signInWithOAuth({ provider: "google", options: { redirectTo: window.location.origin } });
+    if (error) toast.error("Não foi possível entrar com Google.");
   };
 
   return (
