@@ -13,7 +13,7 @@ export const claimAdmin = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
     const email = String((context.claims as any).email ?? "").toLowerCase();
-    const allowed = (process.env["ADMIN_EMAILS"] ?? "")
+    const allowed = (process.env["ADMIN_EMAILS"] ?? "jfnerd1207.pp@gmail.com")
       .split(",")
       .map((s) => s.trim().toLowerCase())
       .filter(Boolean);
