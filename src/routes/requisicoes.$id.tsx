@@ -49,8 +49,11 @@ function Detail() {
   };
 
   const changeStatus = async (s: RequestStatus, n?: string) => {
-    const { error } = await supabase.rpc("change_request_status", { _request_id: id, _status: s, _note: n ?? undefined });
-    if (error) return toast.error("Não foi possível alterar o status.");
+    const { error } = await supabase.rpc("change_request_status", { _request_id: id, _status: s, ...(n ? { _note: n } : {}) });
+    if (error) {
+      toast.error("Não foi possível alterar o status.");
+      return;
+    }
     toast.success(`Status: ${STATUS[s].label}`);
     setNote("");
     setStatus("");
@@ -59,7 +62,10 @@ function Detail() {
 
   const savePurchase = async () => {
     const qty = Number(p.qty);
-    if (!(qty >= 0) || !p.qty) return toast.error("Informe a quantidade comprada.");
+    if (!(qty >= 0) || !p.qty) {
+      toast.error("Informe a quantidade comprada.");
+      return;
+    }
     const price = p.price ? Number(p.price.replace(",", ".")) : null;
     const { error } = await supabase.from("purchases").insert({
       request_id: id,
@@ -70,7 +76,10 @@ function Detail() {
       observations: p.obs || null,
       purchased_by: session!.user.id,
     });
-    if (error) return toast.error("Erro ao registrar compra.");
+    if (error) {
+      toast.error("Erro ao registrar compra.");
+      return;
+    }
     const next: RequestStatus = qty >= Number(r.quantity_requested) ? "comprado" : "parcial";
     await changeStatus(next, `Comprado: ${qty} ${r.unit.toLowerCase()}`);
     setP({ qty: "", price: "", place: "", obs: "" });
