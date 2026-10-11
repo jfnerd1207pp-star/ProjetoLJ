@@ -1,6 +1,6 @@
 import { useEffect, type ReactNode } from "react";
 import { Link, useNavigate } from "@tanstack/react-router";
-import { Home, ListChecks, LogOut, Plus, ShoppingCart, ClipboardList } from "lucide-react";
+import { Home, ListChecks, LogOut, Plus, ShoppingCart, ClipboardList, Shield } from "lucide-react";
 import { useAuth } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
 import { LoadingState } from "./states";
@@ -21,8 +21,8 @@ export function Logo({ light }: { light?: boolean }) {
   );
 }
 
-export function AppShell({ children, title, staffOnly }: { children: ReactNode; title?: string; staffOnly?: boolean }) {
-  const { session, loading, isStaff, roles, name, signOut } = useAuth();
+export function AppShell({ children, title, staffOnly, adminOnly }: { children: ReactNode; title?: string; staffOnly?: boolean; adminOnly?: boolean }) {
+  const { session, loading, isStaff, isAdmin, roles, name, signOut } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -46,6 +46,7 @@ export function AppShell({ children, title, staffOnly }: { children: ReactNode; 
           { to: "/lista", label: "Lista", icon: ListChecks },
         ]
       : []),
+    ...(isAdmin ? [{ to: "/admin", label: "Admin", icon: Shield }] : []),
   ] as const;
 
   return (
@@ -87,9 +88,9 @@ export function AppShell({ children, title, staffOnly }: { children: ReactNode; 
             <h1 className="text-2xl font-bold sm:text-3xl">{title}</h1>
           </div>
         )}
-        {staffOnly && roles.length > 0 && !isStaff ? (
+        {roles.length > 0 && ((staffOnly && !isStaff) || (adminOnly && !isAdmin)) ? (
           <div className="rounded-3xl border bg-card p-8 text-center">
-            <p className="font-semibold">Área restrita à equipe de Compras e Logística.</p>
+            <p className="font-semibold">{adminOnly ? "Área restrita ao administrador." : "Área restrita à equipe de Compras e Logística."}</p>
             <p className="mt-1 text-sm text-muted-foreground">Olá, {name}! Peça ao administrador para liberar seu acesso.</p>
           </div>
         ) : (
